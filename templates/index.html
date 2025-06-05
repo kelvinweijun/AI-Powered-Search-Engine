@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Search Engine</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('/static/background.jpg') center center/cover no-repeat fixed;
+            opacity: 0.4;
+            z-index: -1;
+            filter: brightness(0.5) contrast(1.2);
+        }
+        .content-wrapper {
+            background-color: rgba(25, 25, 25, 0.85);
+            padding: 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 700px;
+            aspect-ratio: 21/9;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.5s ease;
+        }
+        #logo {
+            margin-bottom: 40px;
+            transition: all 0.3s ease;
+        }
+        #logo img {
+            height: 80px;
+            filter: brightness(0) invert(1);
+            transition: transform 0.3s ease;
+        }
+        #logo img:hover {
+            transform: scale(1.05);
+        }
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 30px;
+            transition: all 0.4s ease;
+        }
+        .search-form {
+            display: flex;
+            width: 100%;
+            position: relative;
+        }
+        .search-input {
+            flex-grow: 1;
+            padding: 14px 20px;
+            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px 0 0 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border-right: none;
+            transition: all 0.3s ease;
+        }
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+            transition: opacity 0.3s ease;
+        }
+        .search-input:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 6px 16px rgba(30, 144, 255, 0.4);
+        }
+        .search-button {
+            padding: 14px 30px;
+            background-color: #3a7bd5;
+            background-image: linear-gradient(to right, #3a7bd5, #2d5d9f);
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            border: none;
+            border-radius: 0 24px 24px 0;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .search-button:hover {
+            background-image: linear-gradient(to right, #478de6, #3873c0);
+            transform: translateY(-2px);
+        }
+        .search-options {
+            display: flex;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        .search-options label {
+            margin: 0 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            color: #ccc;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        .search-options label:hover {
+            color: #fff;
+        }
+        .search-options input {
+            margin-right: 8px;
+            accent-color: #3a7bd5;
+        }
+        
+        /* File upload styling */
+        .file-upload-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 30px;
+            display: none;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .file-upload-form {
+            display: flex;
+            width: 100%;
+        }
+        .file-upload-label {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px 0 0 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .file-upload-label:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        .file-upload-label svg {
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        .file-upload-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        .file-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .file-upload-btn {
+            padding: 14px 30px;
+            background-color: #3a7bd5;
+            background-image: linear-gradient(to right, #3a7bd5, #2d5d9f);
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            border: none;
+            border-radius: 0 24px 24px 0;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        .file-upload-btn:hover {
+            background-image: linear-gradient(to right, #478de6, #3873c0);
+            transform: translateY(-2px);
+        }
+        
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8em;
+        }
+        
+        /* Animation classes */
+        .fade-out {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        .fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .search-help {
+            margin-top: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9em;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .active-help {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <div id="logo">
+            <img src="/static/logo.png" alt="Search Engine Logo">
+        </div>
+        
+        <!-- Text Search Container -->
+        <div class="search-container" id="text-search-container">
+            <form class="search-form" action="/search" method="get" id="text-search-form">
+                <input class="search-input" type="text" name="q" placeholder="Search for web pages and images..." required autofocus id="text-search-input">
+                <input type="hidden" name="type" id="search-type" value="web">
+                <button class="search-button" type="submit">Search</button>
+            </form>
+        </div>
+        
+        <!-- Image Search Container -->
+        <div class="file-upload-container" id="image-search-container">
+            <form class="file-upload-form" action="/image-search" method="post" enctype="multipart/form-data" id="image-search-form">
+                <label class="file-upload-label">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <span class="file-name" id="file-name-display">Click to upload an image</span>
+                    <input type="file" class="file-upload-input" name="image" accept="image/*" id="file-upload-input">
+                </label>
+                <button class="file-upload-btn" type="submit">Search</button>
+            </form>
+        </div>
+        
+        <div class="search-options">
+            <label id="web-search-option">
+                <input type="radio" name="search-option" value="web" checked>
+                Web
+            </label>
+            <label id="images-search-option">
+                <input type="radio" name="search-option" value="images">
+                Images
+            </label>
+            <label id="image-upload-option">
+                <input type="radio" name="search-option" value="image-search">
+                Search by Image
+            </label>
+        </div>
+        
+        <div class="search-help" id="web-search-help">
+            Search the web for any topic
+        </div>
+        
+        <div class="search-help" id="images-search-help">
+            Find images related to your keywords
+        </div>
+        
+        <div class="search-help" id="image-search-help">
+            Upload an image to find similar images
+        </div>
+    </div>
+    
+    <div class="footer">
+        &copy; 2025 DeepSearch - Powered by FAISS, SentenceTransformers, and ResNet50
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const textSearchContainer = document.getElementById('text-search-container');
+            const imageSearchContainer = document.getElementById('image-search-container');
+            const searchType = document.getElementById('search-type');
+            const webSearchOption = document.getElementById('web-search-option').querySelector('input');
+            const imagesSearchOption = document.getElementById('images-search-option').querySelector('input');
+            const imageUploadOption = document.getElementById('image-upload-option').querySelector('input');
+            const fileNameDisplay = document.getElementById('file-name-display');
+            const fileUploadInput = document.getElementById('file-upload-input');
+            
+            const webSearchHelp = document.getElementById('web-search-help');
+            const imagesSearchHelp = document.getElementById('images-search-help');
+            const imageSearchHelp = document.getElementById('image-search-help');
+            
+            // Initialize the default state
+            setActiveSearchOption('web');
+            
+            // Handle search type changes
+            webSearchOption.addEventListener('change', function() {
+                if (this.checked) {
+                    setActiveSearchOption('web');
+                }
+            });
+            
+            imagesSearchOption.addEventListener('change', function() {
+                if (this.checked) {
+                    setActiveSearchOption('images');
+                }
+            });
+            
+            imageUploadOption.addEventListener('change', function() {
+                if (this.checked) {
+                    setActiveSearchOption('image-search');
+                }
+            });
+            
+            // Handle file selection
+            fileUploadInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    fileNameDisplay.textContent = this.files[0].name;
+                } else {
+                    fileNameDisplay.textContent = 'Click to upload an image';
+                }
+            });
+            
+            // Main function to handle switching between search types
+            function setActiveSearchOption(type) {
+                // Reset all help texts first
+                webSearchHelp.classList.remove('active-help');
+                imagesSearchHelp.classList.remove('active-help');
+                imageSearchHelp.classList.remove('active-help');
+                
+                // Handle the search option switching
+                if (type === 'web' || type === 'images') {
+                    // Switch to text search
+                    searchType.value = type;
+                    
+                    // Fade out image search if it's currently visible
+                    if (imageSearchContainer.style.display !== 'none') {
+                        imageSearchContainer.classList.remove('fade-in');
+                        imageSearchContainer.classList.add('fade-out');
+                        
+                        setTimeout(() => {
+                            imageSearchContainer.style.display = 'none';
+                            
+                            // Ensure text search is visible and reset any previous fade-out
+                            textSearchContainer.style.display = 'block';
+                            textSearchContainer.classList.remove('fade-out');
+                            setTimeout(() => {
+                                document.getElementById('text-search-input').focus();
+                            }, 50);
+                        }, 300);
+                    } else {
+                        // Text search is already visible, just focus
+                        textSearchContainer.style.display = 'block';
+                        textSearchContainer.classList.remove('fade-out');
+                        document.getElementById('text-search-input').focus();
+                    }
+                    
+                    // Show appropriate help text
+                    if (type === 'web') {
+                        webSearchHelp.classList.add('active-help');
+                    } else if (type === 'images') {
+                        imagesSearchHelp.classList.add('active-help');
+                    }
+                } else if (type === 'image-search') {
+                    // Switch to image search
+                    
+                    // Fade out text search
+                    textSearchContainer.classList.add('fade-out');
+                    
+                    setTimeout(() => {
+                        textSearchContainer.style.display = 'none';
+                        
+                        // Display and fade in image search
+                        imageSearchContainer.style.display = 'block';
+                        imageSearchContainer.classList.remove('fade-out');
+                        imageSearchContainer.classList.add('fade-in');
+                        
+                        // Show appropriate help text
+                        imageSearchHelp.classList.add('active-help');
+                    }, 300);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

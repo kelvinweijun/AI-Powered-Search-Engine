@@ -1,0 +1,182 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ query }} - Image Search Results</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        #logo {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        #logo img {
+            height: 60px;
+        }
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: left;
+        }
+        .search-container form {
+            display: flex;
+            width: 100%;
+            max-width: 600px;
+        }
+        .search-container input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+        }
+        .search-container button {
+            padding: 10px 20px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        .search-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .search-tabs a {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #555;
+            margin-right: 10px;
+        }
+        .search-tabs a.active {
+            border-bottom: 3px solid #4285f4;
+            color: #4285f4;
+            font-weight: bold;
+        }
+        .image-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .image-item {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .image-item:hover {
+            transform: scale(1.03);
+        }
+        .image-container {
+            position: relative;
+            height: 160px;
+            overflow: hidden;
+        }
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .image-info {
+            padding: 10px;
+            background-color: white;
+        }
+        .image-title {
+            font-size: 0.9em;
+            margin: 0 0 5px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .image-source {
+            font-size: 0.75em;
+            color: #0e774a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .pagination {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .pagination a {
+            padding: 8px 16px;
+            text-decoration: none;
+            color: #4285f4;
+            border: 1px solid #ddd;
+            margin: 0 5px;
+            border-radius: 4px;
+        }
+        .pagination a:hover {
+            background-color: #f1f1f1;
+        }
+        .pagination span {
+            margin: 0 10px;
+            color: #555;
+        }
+        .no-results {
+            text-align: left;
+            color: #666;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div id="logo">
+        <a href="/"><img src="/static/logo.png" alt="Search Engine Logo"></a>
+    </div>
+    
+    <!-- Search bar in the results page for new queries -->
+    <div class="search-container">
+        <form action="/search" method="get">
+            <input type="text" name="q" placeholder="Search images..." value="{{ query }}" required>
+            <input type="hidden" name="type" value="images">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- Search type tabs -->
+    <div class="search-tabs">
+        <a href="/search?q={{ query }}&type=web">Web</a>
+        <a href="/search?q={{ query }}&type=images" class="active">Images</a>
+    </div>
+    
+    <!-- Image Results Grid -->
+    {% if results %}
+        <div class="image-results">
+            {% for result in results %}
+                <a href="{{ result.image.url }}" target="_blank" class="image-item">
+                    <div class="image-container">
+                        <img src="{{ result.image.data }}" alt="{{ result.image.alt_text }}">
+                    </div>
+                    <div class="image-info">
+                        <h3 class="image-title">{{ result.image.title }}</h3>
+                        <p class="image-source">{{ result.image.source_page.title }}</p>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-results">No image results found for "{{ query }}"</p>
+    {% endif %}
+    
+    <!-- Pagination Controls -->
+    <div class="pagination">
+        {% if current_page > 1 %}
+            <a href="/search?q={{ query }}&page={{ current_page - 1 }}&type=images">Previous</a>
+        {% endif %}
+        <span>Page {{ current_page }} of {{ total_pages }}</span>
+        {% if current_page < total_pages %}
+            <a href="/search?q={{ query }}&page={{ current_page + 1 }}&type=images">Next</a>
+        {% endif %}
+    </div>
+</body>
+</html>
