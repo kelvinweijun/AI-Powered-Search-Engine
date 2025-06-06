@@ -41,8 +41,22 @@ pip install -r requirements.txt
 
 ### 3. Set Up MariaDB
 Make sure you've installed MariaDB and a suitable database management platform (preferable HeidiSQL or Table Plus). 
-Set up a database connection with host on 127.0.0.1, user: root, password: root.
+Set up a database connection with the following credentials:
+host: 127.0.0.1
+user: root
+password: root
+
 Then, create a new database named "search_engine"
 
-Once done, create a database 
+### 4. Set seed link in `web_crawler.py`
+
+Open web_crawler.py and change the seed link to whatever you want.
+
+### 5. Run `web_crawler.py`
+
+Run web_crawler.py to begin crawling the pages. 
+
+### 6. Run `search_engine.py`
+
+Run search_engine.py to start the search engine. This might take a while because the indexes are being embedded. Once done, access the localhost website on your browser and you should be able to see the webpage.
 
