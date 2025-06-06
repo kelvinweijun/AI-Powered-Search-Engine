@@ -1,6 +1,6 @@
 ## Search Engine and Web Crawler
 
-This project combines a **depth-first web crawler** with a **reverse image search engine**. It allows users to index the contents of web pages—including images—into a relational database and later query that data using an image, returning similar images and associated page content.
+This project combines a **depth-first web crawler** with an **AI-powered search engine with reverse image search capabilities**. It allows users to index the contents of web pages including images, into a relational database and later query that data using an image, returning similar images and associated page content.
 
 ---
 
