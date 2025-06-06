@@ -6,7 +6,7 @@ This project combines a **depth-first web crawler** with an **AI-powered search 
 
 ## Features
 
-### Web Crawler (`crawler.py`)
+### Web Crawler (`web_crawler.py`)
 - Implements a **tree-based, depth-first traversal**.
 - Uses `BeautifulSoup` for HTML parsing and scraping.
 - Extracts:
