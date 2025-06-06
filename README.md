@@ -6,7 +6,7 @@ This project combines a **depth-first web crawler** with a **reverse image searc
 
 ## 🛠️ Features
 
-### 🌐 Web Crawler (`crawler.py`)
+### Web Crawler (`crawler.py`)
 - Implements a **tree-based, depth-first traversal**.
 - Uses `BeautifulSoup` for HTML parsing and scraping.
 - Extracts:
@@ -15,7 +15,7 @@ This project combines a **depth-first web crawler** with a **reverse image searc
 - Stores data in a **MariaDB** database using **SQLAlchemy ORM**.
 - Avoids duplicate indexing and revisiting previously crawled links.
 
-### 🔍 Search Engine (`search_engine.py`)
+### Search Engine (`search_engine.py`)
 - Performs **reverse image search**:
   - Encodes images with **ResNet-50** (via Torchvision).
   - Uses **FAISS** for high-performance similarity search over image vectors.
@@ -24,7 +24,7 @@ This project combines a **depth-first web crawler** with a **reverse image searc
 
 ---
 
-## ⚙️ Setup Instructions
+## Setup Instructions
 
 ### 1. Clone the Repository
 ```bash
