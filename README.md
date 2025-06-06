@@ -38,5 +38,9 @@ pip install -r requirements.txt
 ```
 
 ### 3. Set Up MariaDB
-Make sure you've installed MariaDB and a suitable database management platform (preferable HeidiSQL or Table Plus) 
+Make sure you've installed MariaDB and a suitable database management platform (preferable HeidiSQL or Table Plus). 
+Set up a database connection with host on 127.0.0.1, user: root, password: root.
+Then, create a new database named "search_engine"
+
+Once done, create a database 
 
