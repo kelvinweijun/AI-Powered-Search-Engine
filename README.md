@@ -30,3 +30,13 @@ This project combines a **depth-first web crawler** with a **reverse image searc
 ```bash
 git clone https://github.com/your-username/reverse-image-search-crawler.git
 cd reverse-image-search-crawler
+```
+
+### 2. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Set Up MariaDB
+Make sure you've installed MariaDB and a suitable database management platform (preferable HeidiSQL or Table Plus) 
+
