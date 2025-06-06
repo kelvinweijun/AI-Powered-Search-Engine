@@ -4,7 +4,7 @@ This project combines a **depth-first web crawler** with a **reverse image searc
 
 ---
 
-## 🛠️ Features
+## Features
 
 ### Web Crawler (`crawler.py`)
 - Implements a **tree-based, depth-first traversal**.
