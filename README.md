@@ -16,9 +16,9 @@ This project combines a **depth-first web crawler** with an **AI-powered search 
 - Avoids duplicate indexing and revisiting previously crawled links.
 
 ### Search Engine (`search_engine.py`)
-- Performs **reverse image search**:
+- Performs both **text based search** and **reverse image search**:
   - Encodes images with **ResNet-50** (via Torchvision).
-  - Uses **FAISS** for high-performance similarity search over image vectors.
+  - Uses **FAISS** for high-performance similarity search over text vectors.
 - Returns the most visually similar images from the indexed set.
 - Provides metadata like the source webpage and content snippet for each match.
 
