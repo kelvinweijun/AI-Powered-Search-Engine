@@ -1,12 +1,15 @@
 aiohttp
-asyncmy  # MySQL-compatible async DB driver
+asyncmy
 beautifulsoup4
 databases
-faiss-cpu  # Use faiss-gpu if you're using GPU acceleration
+faiss-cpu               # Use faiss-gpu if using GPU acceleration
 nest_asyncio
 numpy
+pillow                 # For PIL
 python-dateutil
-Pillow
-sentence-transformers
-sqlalchemy>=1.4  # Needed for future.select and newer ORM features
 pymysql
+sentence-transformers
+sqlalchemy>=1.4        # Required for SQLAlchemy 2.0-style usage
+torch                  # PyTorch
+torchvision            # For ResNet models and transforms
+jinja2                 # HTML templating
