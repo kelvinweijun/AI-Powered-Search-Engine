@@ -1,0 +1,12 @@
+aiohttp
+asyncmy  # MySQL-compatible async DB driver
+beautifulsoup4
+databases
+faiss-cpu  # Use faiss-gpu if you're using GPU acceleration
+nest_asyncio
+numpy
+python-dateutil
+Pillow
+sentence-transformers
+sqlalchemy>=1.4  # Needed for future.select and newer ORM features
+pymysql
